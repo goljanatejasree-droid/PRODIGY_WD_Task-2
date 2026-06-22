@@ -1,0 +1,1093 @@
+/* ==========================================================================
+   AeroStopwatch Professional Stylesheet (Fitness/Sports Dashboard Edition)
+   ========================================================================== */
+
+/* 1. CSS Design System Variables */
+:root {
+    /* DEFAULT DARK THEME TOKENS */
+    --bg-primary: #070512;
+    --bg-secondary: #0e0a22;
+    --glass-bg: rgba(18, 14, 38, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: rgba(0, 0, 0, 0.55);
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --nav-border: rgba(255, 255, 255, 0.05);
+
+    /* Dial Elements */
+    --dial-bg: radial-gradient(circle, rgba(20, 16, 44, 0.6) 0%, rgba(9, 7, 20, 0.95) 100%);
+    --dial-track: rgba(255, 255, 255, 0.03);
+    
+    /* Dynamic State Glows */
+    --card-glow-idle: rgba(139, 92, 246, 0.16);
+    --card-glow-running: rgba(6, 182, 212, 0.22);
+    --card-glow-paused: rgba(239, 68, 68, 0.22);
+    
+    /* Accents & Gradients */
+    --accent-gradient-start: #06b6d4;
+    --accent-gradient-end: #8b5cf6;
+    --accent-color: #a78bfa;
+    --accent-soft: rgba(167, 139, 250, 0.12);
+    --accent-soft-border: rgba(167, 139, 250, 0.25);
+
+    /* Button Colors */
+    --btn-primary-bg: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    --btn-primary-shadow: #4338ca;
+    
+    --btn-secondary-bg: rgba(255, 255, 255, 0.04);
+    --btn-secondary-border: rgba(255, 255, 255, 0.08);
+    --btn-secondary-shadow: rgba(0, 0, 0, 0.35);
+
+    --btn-pause-bg: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);
+    --btn-pause-shadow: #b91c1c;
+
+    --btn-reset-bg: rgba(168, 85, 247, 0.06);
+    --btn-reset-border: rgba(168, 85, 247, 0.25);
+    --btn-reset-shadow: rgba(168, 85, 247, 0.15);
+
+    /* Semantics */
+    --success: #10b981;
+    --success-light: #34d399;
+    --success-bg: rgba(16, 185, 129, 0.08);
+    --success-border: rgba(16, 185, 129, 0.25);
+    
+    --error: #ef4444;
+    --error-light: #f87171;
+    --error-bg: rgba(239, 68, 68, 0.08);
+    --error-border: rgba(239, 68, 68, 0.25);
+
+    --card-hover-border: rgba(255, 255, 255, 0.15);
+}
+
+/* LIGHT THEME TOKENS OVERRIDE */
+[data-theme="light"] {
+    --bg-primary: #f2f4f8;
+    --bg-secondary: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: rgba(31, 41, 55, 0.08);
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --text-muted: #8e9cae;
+    --nav-border: rgba(0, 0, 0, 0.05);
+
+    /* Dial Elements */
+    --dial-bg: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(243, 244, 246, 0.9) 100%);
+    --dial-track: rgba(0, 0, 0, 0.04);
+    
+    /* Dynamic State Glows */
+    --card-glow-idle: rgba(99, 102, 241, 0.06);
+    --card-glow-running: rgba(6, 182, 212, 0.06);
+    --card-glow-paused: rgba(239, 68, 68, 0.06);
+    
+    /* Accents & Gradients */
+    --accent-gradient-start: #4f46e5;
+    --accent-gradient-end: #7c3aed;
+    --accent-color: #6d28d9;
+    --accent-soft: rgba(109, 40, 217, 0.07);
+    --accent-soft-border: rgba(109, 40, 217, 0.18);
+
+    /* Button Colors */
+    --btn-primary-bg: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    --btn-primary-shadow: #312e81;
+    
+    --btn-secondary-bg: rgba(255, 255, 255, 0.9);
+    --btn-secondary-border: rgba(0, 0, 0, 0.1);
+    --btn-secondary-shadow: rgba(0, 0, 0, 0.08);
+
+    --btn-pause-bg: linear-gradient(135deg, #dc2626 0%, #e11d48 100%);
+    --btn-pause-shadow: #7f1d1d;
+
+    --btn-reset-bg: rgba(109, 40, 217, 0.04);
+    --btn-reset-border: rgba(109, 40, 217, 0.2);
+    --btn-reset-shadow: rgba(109, 40, 217, 0.06);
+
+    --card-hover-border: rgba(0, 0, 0, 0.15);
+}
+
+/* 2. Resets & Basic Setup */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-primary);
+    background-image: radial-gradient(circle at 50% 50%, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Smooth transition for theme toggle */
+    transition: background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                background-image 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                color 0.4s ease;
+}
+
+/* 3. Glowing Orbs Background (Theme Reactive) */
+.glow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.glow-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.12;
+    mix-blend-mode: screen;
+    animation: floatBlobs 24s infinite alternate ease-in-out;
+    transition: background 0.8s ease, filter 0.8s ease;
+}
+
+[data-theme="light"] .glow-blob {
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    filter: blur(120px);
+}
+
+.glow-blob-primary {
+    background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+    width: 600px;
+    height: 600px;
+    top: -10%;
+    left: 5%;
+    animation-duration: 28s;
+}
+
+.glow-blob-secondary {
+    background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+    width: 700px;
+    height: 700px;
+    bottom: -15%;
+    right: 5%;
+    animation-duration: 32s;
+    animation-delay: -6s;
+}
+
+.glow-blob-tertiary {
+    background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+    width: 500px;
+    height: 500px;
+    top: 35%;
+    left: 45%;
+    animation-duration: 22s;
+    animation-delay: -12s;
+}
+
+@keyframes floatBlobs {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50% { transform: translate(50px, -70px) scale(1.15) rotate(90deg); }
+    100% { transform: translate(-40px, 50px) scale(0.9) rotate(180deg); }
+}
+
+/* 4. Professional Navigation Header */
+.navbar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--nav-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 26px;
+    height: 26px;
+    color: var(--accent-color);
+    filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.3));
+    animation: rotateLogo 12s linear infinite;
+    animation-play-state: paused;
+}
+
+@keyframes rotateLogo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.brand-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    user-select: none;
+}
+
+.brand-name span {
+    background: linear-gradient(90deg, var(--accent-gradient-start), var(--accent-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="light"] .nav-link:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.nav-link.active {
+    color: var(--text-primary);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-border);
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Sun/Moon Theme Toggle Button */
+.btn-theme {
+    background: var(--btn-secondary-bg);
+    border: 1px solid var(--btn-secondary-border);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.btn-theme:hover {
+    transform: scale(1.05) rotate(15deg);
+    border-color: var(--card-hover-border);
+}
+
+.theme-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.25;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.version-badge {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-border);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+/* 5. Dashboard Split Columns Grid */
+.dashboard-grid {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 430px 1fr;
+    gap: 32px;
+    z-index: 10;
+}
+
+.grid-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* 6. Stopwatch Card & Circular Dial Panel */
+.stopwatch-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 40px 32px;
+    box-shadow: 0 30px 60px var(--glass-shadow), var(--inner-glow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    /* Soft breathing light reflecting timer states */
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.stopwatch-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    pointer-events: none;
+    box-shadow: 0 0 50px transparent;
+    transition: box-shadow 0.5s ease;
+    z-index: -1;
+}
+
+/* Theme Glow States triggered from JS */
+.stopwatch-card.state-idle::after {
+    box-shadow: 0 0 50px var(--card-glow-idle);
+}
+.stopwatch-card.state-running::after {
+    box-shadow: 0 0 50px var(--card-glow-running);
+}
+.stopwatch-card.state-paused::after {
+    box-shadow: 0 0 50px var(--card-glow-paused);
+}
+
+.stopwatch-card:hover {
+    border-color: var(--card-hover-border);
+}
+
+/* Circular Dashboard Dial */
+.timer-dial-container {
+    background: var(--dial-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.4);
+    margin-bottom: 36px;
+    overflow: hidden;
+}
+
+.progress-ring {
+    position: absolute;
+    transform: rotate(-90deg);
+    top: 0;
+    left: 0;
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.05s linear;
+    filter: drop-shadow(0 0 8px var(--accent-color));
+}
+
+.timer-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    user-select: none;
+}
+
+.time-main {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 3.4rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.time-main span {
+    display: inline-block;
+    text-align: center;
+}
+
+#hours, #minutes, #seconds {
+    width: 2ch;
+}
+
+.colon {
+    font-weight: 300;
+    opacity: 0.6;
+    margin: 0;
+    width: 0.8ch;
+    text-align: center;
+}
+
+.time-ms {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.25rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    margin-top: -6px;
+    display: flex;
+    align-items: center;
+    text-shadow: 0 0 15px rgba(167, 139, 250, 0.2);
+}
+
+#milliseconds {
+    width: 2ch;
+}
+
+.ms-dot {
+    opacity: 0.7;
+    margin-right: 2px;
+    width: 0.8ch;
+    text-align: center;
+}
+
+/* 7. Tactile 3D Controls buttons */
+.stopwatch-actions {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    user-select: none;
+    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.15s cubic-bezier(0.25, 0.8, 0.25, 1),
+                background 0.3s ease, border-color 0.3s ease;
+}
+
+/* Primary Button (Start/Resume/Pause) */
+.btn-primary.btn-start {
+    background: var(--btn-primary-bg);
+    color: #ffffff;
+    box-shadow: 0 5px 0 var(--btn-primary-shadow), 
+                0 10px 20px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary.btn-start:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 var(--btn-primary-shadow), 
+                0 12px 24px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary.btn-start:active:not(:disabled) {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 var(--btn-primary-shadow), 
+                0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary.btn-pause {
+    background: var(--btn-pause-bg);
+    color: #ffffff;
+    box-shadow: 0 5px 0 var(--btn-pause-shadow), 
+                0 10px 20px rgba(239, 68, 68, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary.btn-pause:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 var(--btn-pause-shadow), 
+                0 12px 24px rgba(239, 68, 68, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary.btn-pause:active:not(:disabled) {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 var(--btn-pause-shadow), 
+                0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Secondary Button (Lap/Reset) */
+.btn-secondary.btn-lap {
+    background: var(--btn-secondary-bg);
+    border: 1px solid var(--btn-secondary-border);
+    color: var(--text-primary);
+    box-shadow: 0 5px 0 var(--btn-secondary-shadow), 
+                0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.btn-secondary.btn-lap:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--card-hover-border);
+    box-shadow: 0 7px 0 var(--btn-secondary-shadow), 
+                0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.btn-secondary.btn-lap:active:not(:disabled) {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 var(--btn-secondary-shadow), 
+                0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Active Reset style */
+.btn-secondary.btn-reset {
+    background: var(--btn-reset-bg);
+    border: 1px solid var(--btn-reset-border);
+    color: var(--accent-color);
+    box-shadow: 0 5px 0 var(--btn-reset-shadow), 
+                0 10px 20px rgba(167, 139, 250, 0.08);
+}
+
+.btn-secondary.btn-reset:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+    box-shadow: 0 7px 0 var(--btn-reset-shadow), 
+                0 12px 24px rgba(167, 139, 250, 0.15);
+}
+
+.btn-secondary.btn-reset:active:not(:disabled) {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 var(--btn-reset-shadow), 
+                0 4px 10px rgba(167, 139, 250, 0.05);
+}
+
+.btn-secondary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: var(--glass-border) !important;
+    background: rgba(255, 255, 255, 0.01) !important;
+    color: var(--text-muted) !important;
+}
+
+.btn-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+}
+
+.btn:hover:not(:disabled) .btn-icon {
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 8. Telemetry Dashboard - Statistics Deck */
+.stats-deck {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.stat-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px var(--glass-shadow);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: var(--card-hover-border);
+    transform: translateY(-2px);
+}
+
+.stat-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.stat-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.25;
+}
+
+/* Semantic colors inside statistics card */
+.card-fastest {
+    border-left: 3px solid var(--success);
+}
+.card-fastest .stat-icon-wrapper {
+    background: var(--success-bg);
+    color: var(--success-light);
+}
+
+.card-slowest {
+    border-left: 3px solid var(--error);
+}
+.card-slowest .stat-icon-wrapper {
+    background: var(--error-bg);
+    color: var(--error-light);
+}
+
+.card-total {
+    border-left: 3px solid var(--accent-color);
+}
+.card-total .stat-icon-wrapper {
+    background: var(--accent-soft);
+    color: var(--accent-color);
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Prevents text overflow in grids */
+}
+
+.stat-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.75px;
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 9. Lap Registry Card & List Table */
+.laps-log-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 35px 70px var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 330px;
+    transition: border-color 0.4s ease;
+}
+
+.laps-log-card:hover {
+    border-color: var(--card-hover-border);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.activity-pill {
+    background: var(--success-bg);
+    border: 1px solid var(--success-border);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--success-light);
+    padding: 3px 8px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+
+.lap-table-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.hdr-num { text-align: left; }
+.hdr-split { text-align: center; }
+.hdr-total { text-align: right; }
+
+.lap-table-body-wrapper {
+    position: relative;
+    overflow-y: auto;
+    max-height: 250px;
+    flex: 1;
+    margin-top: 8px;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--glass-border) transparent;
+}
+
+/* Scrollbars for webkit */
+.lap-table-body-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+.lap-table-body-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+.lap-table-body-wrapper::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 10px;
+}
+.lap-table-body-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--card-hover-border);
+}
+
+/* Empty Registry Placeholders */
+.empty-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.placeholder-icon {
+    width: 44px;
+    height: 44px;
+    color: var(--text-muted);
+    stroke-width: 1.5;
+    margin-bottom: 16px;
+    opacity: 0.6;
+}
+
+.empty-placeholder h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.empty-placeholder p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    max-width: 280px;
+}
+
+/* Populated Lap Rows */
+.laps-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lap-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92rem;
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid transparent;
+    animation: rowSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: all 0.2s ease;
+}
+
+[data-theme="light"] .lap-row {
+    background: rgba(0, 0, 0, 0.015);
+}
+
+.lap-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="light"] .lap-row:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.lap-row-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.lap-row-split {
+    text-align: center;
+    font-weight: 500;
+}
+
+.lap-row-total {
+    text-align: right;
+    color: var(--text-secondary);
+}
+
+@keyframes rowSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.99);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Fastest & Slowest Lap Row Overrides */
+.lap-row.fastest-row {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+}
+.lap-row.fastest-row .lap-row-split {
+    color: var(--success-light);
+    font-weight: 700;
+}
+.lap-row.fastest-row .lap-row-num {
+    color: var(--success-light);
+}
+.lap-row.fastest-row .lap-row-num::after {
+    content: 'FAST';
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 800;
+    background: var(--success-border);
+    color: var(--success-light);
+    padding: 1px 4px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.lap-row.slowest-row {
+    background: var(--error-bg);
+    border-color: var(--error-border);
+}
+.lap-row.slowest-row .lap-row-split {
+    color: var(--error-light);
+    font-weight: 700;
+}
+.lap-row.slowest-row .lap-row-num {
+    color: var(--error-light);
+}
+.lap-row.slowest-row .lap-row-num::after {
+    content: 'SLOW';
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 800;
+    background: var(--error-border);
+    color: var(--error-light);
+    padding: 1px 4px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* 10. Developer Attribution Footer */
+.footer {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--nav-border);
+    padding: 24px;
+    z-index: 10;
+    margin-top: auto;
+    transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.footer-info {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.dev-credits {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.footer-links {
+    display: flex;
+    gap: 16px;
+}
+
+.footer-link-icon {
+    color: var(--text-secondary);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.footer-link-icon:hover {
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+/* 11. Fully Responsive Breakpoints */
+@media (max-width: 990px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        max-width: 580px;
+        margin: 24px auto;
+    }
+    
+    .stopwatch-panel {
+        align-items: center;
+    }
+    
+    .stopwatch-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 550px) {
+    .nav-container {
+        padding: 12px 16px;
+    }
+    
+    .brand-name {
+        font-size: 1.1rem;
+    }
+    
+    .nav-menu {
+        display: none; /* Hide nav links on extra small screen for toggle/version space */
+    }
+    
+    .dashboard-grid {
+        padding: 0 16px;
+        margin: 16px auto;
+        gap: 24px;
+    }
+    
+    .stopwatch-card {
+        padding: 32px 20px;
+        border-radius: 24px;
+    }
+    
+    .timer-dial-container {
+        width: 250px;
+        height: 250px;
+        margin-bottom: 28px;
+    }
+    
+    .progress-ring {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .progress-ring-circle,
+    .progress-ring-track {
+        r: 113;
+        cx: 125;
+        cy: 125;
+        stroke-dasharray: 710;
+        stroke-dashoffset: 710;
+    }
+    
+    .time-main {
+        font-size: 3rem;
+    }
+    
+    .time-ms {
+        font-size: 2rem;
+    }
+    
+    .btn {
+        padding: 14px 16px;
+        font-size: 0.95rem;
+    }
+    
+    .stats-deck {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 12px 16px;
+    }
+    
+    .laps-log-card {
+        padding: 16px;
+        min-height: 280px;
+    }
+    
+    .lap-row {
+        font-size: 0.85rem;
+        padding: 10px 12px;
+        grid-template-columns: 70px 1fr 1fr;
+    }
+    
+    .lap-table-header {
+        font-size: 0.7rem;
+        grid-template-columns: 70px 1fr 1fr;
+        padding: 6px 12px;
+    }
+    
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+}

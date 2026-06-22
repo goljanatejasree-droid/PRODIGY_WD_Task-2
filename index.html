@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A production-grade, highly responsive Stopwatch Dashboard Web Application. Features dark/light themes, lap statistics, millisecond precision, and a fitness sports-app aesthetic.">
+    <title>AeroStopwatch | Fitness & Sports Performance Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Floating background glow blobs (dynamic state glows) -->
+    <div class="glow-container">
+        <div class="glow-blob glow-blob-primary" id="glow-1"></div>
+        <div class="glow-blob glow-blob-secondary" id="glow-2"></div>
+        <div class="glow-blob glow-blob-tertiary" id="glow-3"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <svg class="brand-logo" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span class="brand-name">Aero<span>Stopwatch</span></span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#stopwatch" class="nav-link active" data-tab="stopwatch">Stopwatch</a>
+                <a href="#history" class="nav-link" data-tab="history">History</a>
+                <a href="#about" class="nav-link" data-tab="about">About</a>
+            </nav>
+
+            <div class="nav-controls">
+                <!-- Dark/Light Theme Toggle -->
+                <button id="theme-toggle" class="btn-theme" aria-label="Toggle Theme">
+                    <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon moon-icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <span class="version-badge">PRO v1.0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="dashboard-grid">
+        
+        <!-- Left Column: Stopwatch Control Card -->
+        <section class="grid-panel stopwatch-panel" id="stopwatch-section">
+            <div class="stopwatch-card state-idle" id="timer-card">
+                <!-- Circular Dial with SVG Sweep Progress Ring -->
+                <div class="timer-dial-container">
+                    <svg class="progress-ring" width="280" height="280">
+                        <defs>
+                            <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="var(--accent-gradient-start)" />
+                                <stop offset="100%" stop-color="var(--accent-gradient-end)" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Background circular track -->
+                        <circle class="progress-ring-track" stroke="var(--dial-track)" stroke-width="6" fill="transparent" r="128" cx="140" cy="140" />
+                        <!-- Animated sweep overlay ring -->
+                        <circle class="progress-ring-circle" stroke="url(#ring-gradient)" stroke-width="6" stroke-linecap="round" fill="transparent" r="128" cx="140" cy="140" stroke-dasharray="804.25" stroke-dashoffset="804.25" id="progress-circle" />
+                    </svg>
+                    
+                    <!-- Centered Digital Numbers -->
+                    <div class="timer-display" id="display">
+                        <div class="time-main">
+                            <span id="hours">00</span><span class="colon">:</span><span id="minutes">00</span><span class="colon">:</span><span id="seconds">00</span>
+                        </div>
+                        <div class="time-ms">
+                            <span class="ms-dot">:</span><span id="milliseconds">00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D Tactile Buttons controls -->
+                <div class="stopwatch-actions">
+                    <!-- Lap/Reset Button -->
+                    <button id="lap-reset-btn" class="btn btn-secondary btn-lap" aria-label="Record Lap" disabled>
+                        <svg class="btn-icon lap-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                            <line x1="4" y1="22" x2="4" y2="15"></line>
+                        </svg>
+                        <svg class="btn-icon reset-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                        </svg>
+                        <span class="btn-label" id="lap-reset-text">Lap</span>
+                    </button>
+
+                    <!-- Start/Pause Button -->
+                    <button id="start-pause-btn" class="btn btn-primary btn-start" aria-label="Start Timer">
+                        <svg class="btn-icon start-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        <svg class="btn-icon pause-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                        <span class="btn-label" id="start-pause-text">Start</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Performance Stats & Laps Log -->
+        <section class="grid-panel telemetry-panel" id="telemetry-section">
+            
+            <!-- Statistics Deck -->
+            <div class="stats-deck">
+                <!-- Fastest Lap Card -->
+                <div class="stat-card card-fastest">
+                    <div class="stat-icon-wrapper">
+                        <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-title">Fastest Lap</span>
+                        <span class="stat-value" id="fastest-lap-val">--:--:--:--</span>
+                    </div>
+                </div>
+
+                <!-- Slowest Lap Card -->
+                <div class="stat-card card-slowest">
+                    <div class="stat-icon-wrapper">
+                        <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-title">Slowest Lap</span>
+                        <span class="stat-value" id="slowest-lap-val">--:--:--:--</span>
+                    </div>
+                </div>
+
+                <!-- Total Laps Card -->
+                <div class="stat-card card-total">
+                    <div class="stat-icon-wrapper">
+                        <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-title">Total Laps</span>
+                        <span class="stat-value" id="total-laps-val">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lap Logs Frosted Card -->
+            <div class="laps-log-card">
+                <div class="card-header">
+                    <h2>Laps Registry</h2>
+                    <span class="activity-pill">Active Record</span>
+                </div>
+                
+                <!-- Table headers -->
+                <div class="lap-table-header">
+                    <span class="hdr-num">Lap</span>
+                    <span class="hdr-split">Split Duration</span>
+                    <span class="hdr-total">Cumulative Time</span>
+                </div>
+
+                <!-- Scrollable Lap Table Area -->
+                <div class="lap-table-body-wrapper">
+                    <!-- Empty state placeholder -->
+                    <div class="empty-placeholder" id="empty-state">
+                        <svg class="placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <h3>Ready to Record</h3>
+                        <p>Laps split log will appear here once you start the stopwatch and click the "Lap" button.</p>
+                    </div>
+
+                    <!-- Populated Laps List -->
+                    <ul class="laps-list" id="laps-list"></ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Professional Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <p>&copy; 2026 AeroStopwatch Dashboard. Built for Professional Portfolio.</p>
+                <p class="dev-credits">Designed and developed using Vanilla JS, HTML5, and CSS3.</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com" target="_blank" class="footer-link-icon" aria-label="GitHub Portfolio">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                    </svg>
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="footer-link-icon" aria-label="LinkedIn Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Script -->
+    <script src="script.js"></script>
+</body>
+</html>
